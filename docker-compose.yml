@@ -4,11 +4,12 @@ services:
 
   varnish:
     build: .
-    image: mpwar/varnish
     ports:
       - "80:8080"
     volumes:
       - ./default.vcl:/etc/varnish/default.vcl
+    depends_on:
+      - drupal
 
   drupal:
     image: drupal:8-apache
@@ -20,6 +21,8 @@ services:
       # volume (which is what we're creating here) will be initialized with the
       # existing content of the image at the same location
       - /var/www/html/sites
+    depends_on:
+      - postgres
     restart: always
 
   postgres:
